@@ -1,0 +1,2 @@
+# Redact the PageSpeed API key on commit (filter defined in local .git/config)
+audit-website/Do.md filter=redact-key

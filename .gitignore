@@ -1,0 +1,13 @@
+# Secrets
+.env
+**/.env
+
+# Client audit reports stay local
+audit-website/reports/*
+!audit-website/reports/.gitkeep
+
+# Plugin builds
+*.zip
+*.zip.bak
+
+.DS_Store
