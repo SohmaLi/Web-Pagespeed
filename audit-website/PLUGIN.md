@@ -1,6 +1,6 @@
-# Vietnix Pagespeed PRO — cách plugin hoạt động
+# Vietnix Pagespeed PUB — cách plugin hoạt động trên site LiteSpeed Cache
 
-Đọc file này trước khi đề xuất hoặc ghi option, dòng VPI, Critical CSS, lazyload HTML. Mục 1–9 là cách plugin xử lý trang (mã frontend `inc/frontend/*.php`), mục 10 là các tool MCP agent dùng (`inc/mcp/`). Mã nguồn: `~/Documents/vietnix/wordpress/vietnix.vn/wp-content/plugins/vietnix-pagespeed-pro`. Thấy plugin chạy khác file này thì đọc lại mã nguồn.
+Đọc file này trước khi đề xuất hoặc ghi option, dòng VPI, Critical CSS, lazyload HTML. Mục 1–9 là cách plugin xử lý trang (mã frontend `inc/frontend/*.php`), mục 10 là các tool MCP agent dùng (`inc/mcp/`). Mã nguồn: `audit-w3tc/vietnix-pagespeed-pub/` (bản cài thử ở máy: `~/Documents/vietnix/wordpress/vietnix.vn/wp-content/plugins/vietnix-pagespeed-pub`). Thấy plugin chạy khác file này thì đọc lại mã nguồn.
 
 Option lưu trong `wp_options` với tiền tố `vnx_` (ví dụ `vnx_delay_js`). Qua MCP chỉ dùng tên không có tiền tố.
 

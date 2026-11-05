@@ -45,7 +45,15 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function readPagespeedKey(doPath) {
+// Key file: shared/.env (PAGESPEED_API_KEY=…), shared by audit-website and audit-w3tc. --env overrides it;
+// --do <Do.md> still reads the old "API key PageSpeed" row of a phiếu when given.
+function readPagespeedKey(envPath, doPath) {
+  if (envPath && fs.existsSync(envPath)) {
+    const line = fs.readFileSync(envPath, "utf8").split("\n").find((row) => /^\s*PAGESPEED_API_KEY\s*=/.test(row));
+    const value = line ? line.split("=").slice(1).join("=").trim().replace(/^["']|["']$/g, "") : "";
+    if (value) return value;
+  }
+  if (!doPath || !fs.existsSync(doPath)) return "";
   const text = fs.readFileSync(doPath, "utf8");
   const line = text.split("\n").find((row) => /^\|\s*API key PageSpeed/.test(row));
   if (!line) return "";
@@ -541,7 +549,8 @@ async function main() {
   const pageUrl = arg(PAGE_URL_FLAG, "");
   const scratch = arg("--scratch", "/tmp/vnx-measure");
   const assets = arg("--assets", "");
-  const doPath = arg("--do", "audit-website/Do.md");
+  const envPath = arg("--env", path.join(__dirname, "..", ".env"));
+  const doPath = arg("--do", "");
   const skipPsi = process.argv.includes("--skip-psi");
   const skipBrowser = process.argv.includes("--skip-browser");
   if (!pageUrl) {
@@ -555,7 +564,7 @@ async function main() {
 
   const tasks = [];
   if (!skipPsi) {
-    const key = readPagespeedKey(doPath);
+    const key = readPagespeedKey(envPath, doPath);
     if (!key) summary.errors.push("pagespeed key missing");
     else {
       tasks.push(

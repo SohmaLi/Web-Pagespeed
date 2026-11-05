@@ -1,8 +1,8 @@
 # Phiếu thông tin website
 
-Người dùng gửi link trong chat, hoặc tự điền mục 1 và mục 2. Agent điền phần còn lại. Ô chưa biết để `[chưa rõ]`, không đoán. Quy trình: `README.md` mục **Quy trình**, sơ đồ trong `quy-trinh/`.
+Người dùng gửi link trong chat, hoặc tự điền mục 1 và mục 2. Agent điền phần còn lại. Ô chưa biết để `[chưa rõ]`, không đoán. Quy trình: `../shared/README.md` mục **Quy trình**, sơ đồ trong `../shared/quy-trinh/`.
 
-Mỗi phiếu một miền. Link mới cùng miền thì thêm dòng ở mục 2. Miền khác thì ghi đè phiếu, giữ ô API key; báo cáo cũ vẫn nằm trong `reports/`. Không ghi token MCP vào file này.
+Mỗi phiếu một miền. Link mới cùng miền thì thêm dòng ở mục 2. Miền khác thì ghi đè phiếu; báo cáo cũ vẫn nằm trong `reports/`. Không ghi token MCP hay API key vào file này.
 
 ## 1. Người dùng cung cấp
 
@@ -11,7 +11,7 @@ Mỗi phiếu một miền. Link mới cùng miền thì thêm dòng ở mục 2
 | Tên khách hàng    | `[chưa rõ]`                             |
 | Tên miền          | `[chưa rõ]`                             |
 | Trường hợp        | `[chưa rõ]`                             |
-| API key PageSpeed | [chưa rõ] |
+| API key PageSpeed | `[trong shared/.env]` |
 | Ghi chú           |                                         |
 
 | Mục               | Bắt buộc             | Cách điền                                                                                                                                                                                 |
@@ -19,7 +19,7 @@ Mỗi phiếu một miền. Link mới cùng miền thì thêm dòng ở mục 2
 | Tên khách hàng    | Không                | In trên báo cáo Word. Chưa có thì giữ `[chưa rõ]`                                                                                                                                         |
 | Tên miền          | Có                   | Chỉ gửi link thì agent lấy miền từ URL                                                                                                                                                    |
 | Trường hợp        | Có                   | `1` chỉ khảo sát (Phase 1). `2` khảo sát và tối ưu (Phase 1 nếu chưa có báo cáo, rồi Phase 2). Trong chat nói "khảo sát" hoặc "tối ưu" thì agent tự điền. Còn `[chưa rõ]` thì agent hỏi lại |
-| Key PageSpeed     | Khi không đo qua MCP | Agent đọc bằng lệnh, không in, không chép sang báo cáo                                                                                                                                    |
+| Key PageSpeed     | Khi không đo qua MCP | Không điền ở đây. Key nằm trong `shared/.env` (dòng `PAGESPEED_API_KEY=…`, chỉ ở máy, không lên git). Script đọc bằng lệnh, không in, không chép sang báo cáo |
 | Ghi chú           | Không                | Việc đặc biệt của lần chạy                                                                                                                                                                |
 
 ## 2. Link cần đo
@@ -43,7 +43,7 @@ Agent chép từng dòng sang bảng và điền các cột còn lại:
 
 | Mục                                       | Giá trị     |
 | ----------------------------------------- | ----------- |
-| Plugin Vietnix Pagespeed PRO trên site    | `[chưa rõ]` |
+| Plugin Vietnix Pagespeed PUB trên site    | `[chưa rõ]` |
 | MCP `vietnix-pagespeed` nối đúng miền này | `[chưa rõ]` |
 | Trạng thái plugin/MCP                     | `[chưa rõ]` |
 | Báo cáo Phase 1                           | `[chưa rõ]` |

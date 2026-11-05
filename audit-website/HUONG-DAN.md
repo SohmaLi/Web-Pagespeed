@@ -6,7 +6,7 @@ Bạn chỉ cần đọc file này và chat với agent. Phần kỹ thuật (`R
 
 ## Hai trường hợp
 
-Công việc chia hai giai đoạn: **Phase 1** khảo sát (đo và báo cáo hiện trạng), **Phase 2** tối ưu và nghiệm thu. Sơ đồ nằm trong thư mục `quy-trinh/`.
+Công việc chia hai giai đoạn: **Phase 1** khảo sát (đo và báo cáo hiện trạng), **Phase 2** tối ưu và nghiệm thu. Sơ đồ nằm trong thư mục `shared/quy-trinh/`.
 
 | | Trường hợp 1. Chỉ khảo sát | Trường hợp 2. Khảo sát và tối ưu |
 | --- | --- | --- |
@@ -31,7 +31,7 @@ Trường hợp 2 mà đã có báo cáo khảo sát (Phase 1) của tên miền
 
 Không cần cài plugin. Dùng được cho site bất kỳ. Site đã cài plugin vẫn chỉ đo và báo cáo, không tối ưu.
 
-1. Mở `Do.md`, dán API key PageSpeed vào mục 1. Chỉ làm một lần, đổi miền vẫn giữ key. Để trống thì agent lấy điểm trên pagespeed.web.dev.
+1. Mở file `shared/.env` (thư mục `shared` nằm cạnh `audit-website`; chưa có thì tạo), ghi một dòng `PAGESPEED_API_KEY=` rồi dán key ngay sau dấu `=`. Chỉ làm một lần, dùng cho mọi miền. Chưa có key thì agent lấy điểm trên pagespeed.web.dev.
 2. Gửi link cho agent, nói rõ chỉ khảo sát (xem **Gửi link**). Agent tự đo và viết báo cáo, không hỏi gì.
 3. Nhận báo cáo hiện trạng trong `reports/` (xem **Kết quả**). Mỗi trang có kết luận `Không cần tối ưu` hoặc `Cần tối ưu` kèm thông số chưa đạt (xem **Tiêu chí ĐẠT**). Dán ảnh Network vào file Word rồi gửi khách.
 
@@ -134,7 +134,7 @@ Agent tự điền `Do.md` rồi chạy. Bạn cũng có thể tự điền mụ
 
 - Mỗi lần chạy chỉ một tên miền. Link khác tên miền sẽ bị bỏ.
 - Mỗi link tốn 2 lượt PageSpeed (mobile và desktop). Quota là 25.000 lượt mỗi ngày, 30 lượt mỗi phút.
-- Sang miền khác thì agent ghi đè `Do.md` và giữ ô API key. Báo cáo cũ vẫn nằm trong `reports/`.
+- Sang miền khác thì agent ghi đè `Do.md`. API key trong `shared/.env` giữ nguyên. Báo cáo cũ vẫn nằm trong `reports/`.
 
 ## Kết quả
 
@@ -225,7 +225,7 @@ Cần biết:
 ## Bảo mật
 
 - Không gửi token MCP hay ảnh trang **Mẫu kết nối** cho ai.
-- Mục 1 của `Do.md` chứa API key PageSpeed. Xóa ô này trước khi chia sẻ thư mục `audit-website`.
+- File `shared/.env` chứa API key PageSpeed. Không gửi file này khi chia sẻ thư mục. Git đã bỏ qua file này.
 - Báo cáo không chứa token hay key, và không được lưu lên site.
 - File `.env` có thể chứa tài khoản wp-admin (mục **Thay ảnh nặng**). Xóa sau khi xong và không chia sẻ file này.
 
@@ -262,5 +262,6 @@ Cần biết:
 | `HUONG-DAN.md` | Có. File này |
 | `Do.md` | Tùy chọn. Phiếu thông tin website. Agent tự điền nếu bạn gửi link trong chat |
 | `reports/` | Có. Nơi nhận báo cáo |
-| `quy-trinh/` | Tùy chọn. Sơ đồ tổng `Quy trình hoạt động.png` (bản sửa được: `.bpmn`, mở trên bpmn.io), sơ đồ Phase 1, Phase 2 và bản phân tích quy trình |
-| Còn lại: `README.md`, `PLUGIN.md`, ba thư mục skill, `scripts/`, file Word mẫu | Không. Agent đọc và dùng |
+| `shared/.env` | Có, một lần. Nơi dán API key PageSpeed |
+| `shared/quy-trinh/` | Tùy chọn. Sơ đồ tổng `Quy trình hoạt động.png` (bản sửa được: `.bpmn`, mở trên bpmn.io), sơ đồ Phase 1, Phase 2 và bản phân tích quy trình |
+| Còn lại: `README.md`, `PLUGIN.md`, ba thư mục skill; trong `shared/`: `README.md`, `scripts/`, file Word mẫu | Không. Agent đọc và dùng |

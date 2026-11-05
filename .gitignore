@@ -11,3 +11,6 @@ audit-website/reports/*
 *.zip.bak
 
 .DS_Store
+
+# PUB/W3TC client reports stay local
+audit-w3tc/reports/*

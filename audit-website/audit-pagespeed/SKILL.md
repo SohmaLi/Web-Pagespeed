@@ -1,32 +1,32 @@
 ---
 name: audit-pagespeed
 description: >-
-  Đo điểm PageSpeed Insights qua MCP của Vietnix Pagespeed PRO, lập báo cáo
+  Đo điểm PageSpeed Insights qua MCP của Vietnix Pagespeed PUB (site LiteSpeed Cache), lập báo cáo
   phương án plugin và mục đề xuất LiteSpeed. Dùng khi người dùng đưa URL cần
   kiểm tra tốc độ, điểm PageSpeed, nguyên nhân chậm, hoặc yêu cầu audit website.
 ---
 
 # Audit PageSpeed qua MCP
 
-Đọc `audit-website/PLUGIN.md` để biết option và dòng nào chạy trên trang nào. Plugin Vietnix Pagespeed PRO là nơi ghi cấu hình. MCP là cổng để agent đọc điểm và ghi option. Không sửa file tối ưu frontend của plugin trong lúc audit.
+Đọc `audit-website/PLUGIN.md` để biết option và dòng nào chạy trên trang nào. Plugin Vietnix Pagespeed PUB là nơi ghi cấu hình. MCP là cổng để agent đọc điểm và ghi option. Không sửa file tối ưu frontend của plugin trong lúc audit.
 
 ## Trước khi đo
 
-Làm theo bước 0 trong mục **Quy trình** của `audit-website/README.md`. Thông tin website nằm ở `audit-website/Do.md`. Trường hợp 2 làm thêm bước 0b: chỉ dùng báo cáo Phase 1 có thư mục trùng **đúng** tên miền, không khớp theo đuôi. Số so sánh theo mục **Nguồn so sánh** trong README: chỉ trong thư mục của lần chạy, cùng URL, cùng thiết bị, cùng nguồn đo.
+Làm theo bước 0 trong mục **Quy trình** của `shared/README.md`. Thông tin website nằm ở `audit-website/Do.md`. Trường hợp 2 làm thêm bước 0b: chỉ dùng báo cáo Phase 1 có thư mục trùng **đúng** tên miền, không khớp theo đuôi. Số so sánh theo mục **Nguồn so sánh** trong `shared/README.md`: chỉ trong thư mục của lần chạy, cùng URL, cùng thiết bị, cùng nguồn đo.
 
-Trước mục dưới đây, kiểm tra cách nối theo agent. Cursor: file `vietnix-pagespeed-bridge.mjs` phải có tại đường dẫn `args` trong `~/.cursor/mcp.json` (mặc định `~/.cursor/vietnix-pagespeed-bridge.mjs`) trước khi gọi tool `vnx_*`. Chưa có thì copy từ `audit-website/scripts/vietnix-pagespeed-bridge.mjs`. Claude Code, Claude và Codex không copy file bridge. Thiếu khối MCP thì vẫn đo URL trong `Do.md` bằng key mục 1, không bịa token.
+Trước mục dưới đây, kiểm tra cách nối theo agent. Cursor: file `vietnix-pagespeed-bridge.mjs` phải có tại đường dẫn `args` trong `~/.cursor/mcp.json` (mặc định `~/.cursor/vietnix-pagespeed-bridge.mjs`) trước khi gọi tool `vnx_*`. Chưa có thì copy từ `shared/scripts/vietnix-pagespeed-bridge.mjs`. Claude Code, Claude và Codex không copy file bridge. Thiếu khối MCP thì vẫn đo URL trong `Do.md` bằng key trong `shared/.env`, không bịa token.
 
-1. Plugin đã cài chưa trên miền trong `Do.md`: kiểm tra `wp-content/plugins/vietnix-pagespeed-pro/vnx-pagespeed.php` rồi `wp-content/plugins/vietnix-pagespeed/vnx-pagespeed.php`. `200` là đã cài (có thể chưa bật). Cả hai `404` mà HTML vẫn có `vnx-critical-css-inline` hoặc `data-vnx-lazy` thì plugin nằm ở thư mục tên khác: vẫn coi là đã cài.
+1. Plugin đã cài chưa trên miền trong `Do.md`: kiểm tra `wp-content/plugins/vietnix-pagespeed-pub/vnx-pagespeed.php`. `200` là đã cài (có thể chưa bật). `404` mà HTML vẫn có `vnx-critical-css-inline` hoặc `data-vnx-lazy` thì plugin nằm ở thư mục tên khác: vẫn coi là đã cài.
 2. Gọi `vnx_get_status` một lần, so host của `site_url` với miền cần đo. Khác host: không gọi tool `vnx_*` nào khác. Đo, phân tích và báo cáo hiện trạng vẫn chạy. Trường hợp 1 kết thúc; trường hợp 2 dừng ở bước 2b chờ nối MCP đúng miền.
 3. MCP đúng miền: cần `plugin_active`, `mcp_enabled`, và `pagespeed_api_key_header` là `present` trước `vnx_analyze_pagespeed`. Thiếu API key thì đo PSI trên pagespeed.web.dev thay cho `vnx_analyze_pagespeed`, ghi rõ nguồn. Không bịa điểm.
 
 ### Đo khi không có MCP
 
-Chưa cài plugin, chưa nối MCP, MCP tắt, hoặc MCP đang nối site khác (ở cả hai trường hợp): làm theo bước 0 và mục **Đo khi chưa có MCP đúng miền** trong `audit-website/README.md` cho phần đo và báo cáo. Không gọi tool `vnx_*` cho miền này, ngoài một lần `vnx_get_status` để so `site_url`. Không dán API key hay token vào báo cáo. Key ở `Do.md` chỉ đọc vào biến, không in ra.
+Chưa cài plugin, chưa nối MCP, MCP tắt, hoặc MCP đang nối site khác (ở cả hai trường hợp): làm theo bước 0 và mục **Đo khi chưa có MCP đúng miền** trong `shared/README.md` cho phần đo và báo cáo. Không gọi tool `vnx_*` cho miền này, ngoài một lần `vnx_get_status` để so `site_url`. Không dán API key hay token vào báo cáo. Key trong `shared/.env` chỉ đọc vào biến, không in ra.
 
 ## Đo
 
-Khởi chạy đo trước khi đọc hết `PLUGIN.md`. Host `site_url` trùng miền thì gọi `vnx_analyze_pagespeed` cho từng URL, cả mobile và desktop, và cùng lúc chạy `audit-website/scripts/measure-run.js --skip-psi` cho tải thật. Host khác, chưa có MCP, hoặc chưa cài plugin: bỏ `--skip-psi`, một lệnh lấy cả điểm lẫn tải thật, không gọi `vnx_analyze_pagespeed`. Mỗi URL tốn 2 request. Quota API key là 25.000 request mỗi ngày và 30 request mỗi phút. Hết quota thì đo trên pagespeed.web.dev, không bịa điểm. Lệnh exit 2: giữ nhánh đã có số, không chạy lại nhánh đó.
+Khởi chạy đo trước khi đọc hết `PLUGIN.md`. Host `site_url` trùng miền thì gọi `vnx_analyze_pagespeed` cho từng URL, cả mobile và desktop, và cùng lúc chạy `shared/scripts/measure-run.js --skip-psi` cho tải thật. Host khác, chưa có MCP, hoặc chưa cài plugin: bỏ `--skip-psi`, một lệnh lấy cả điểm lẫn tải thật, không gọi `vnx_analyze_pagespeed`. Mỗi URL tốn 2 request. Quota API key là 25.000 request mỗi ngày và 30 request mỗi phút. Hết quota thì đo trên pagespeed.web.dev, không bịa điểm. Lệnh exit 2: giữ nhánh đã có số, không chạy lại nhánh đó.
 
 Chụp pagespeed.web.dev tối đa một lần, 40 giây. `Unable to resolve` hoặc chưa thấy điểm thì dừng.
 
@@ -63,7 +63,7 @@ Ghi báo cáo ra file trong repo. Báo cáo không lưu trên site:
 
 Một miền một thư mục và một file trong ngày. Báo cáo Word và ảnh của lần đó cũng nằm trong thư mục này, không lưu ở thư mục gốc. Kiểm tra lại cùng ngày thì ghi thêm mục vào file đó, không tạo file thứ hai. Chưa gọi tool ghi option.
 
-Mỗi URL có điểm mobile và desktop, kèm một dòng chú ý ngay dưới bảng điểm và metric: các chỉ số không cần cải thiện (điểm tổng hiệu suất PSI ≥ 90; tải thật trong ngưỡng). Báo cáo chỉ kết luận theo điểm tổng; FCP, LCP, TBT, CLS, Speed Index, TTFB chỉ dùng để chọn dòng `proposed` khi điểm tổng chưa đạt. Cách ghi theo mục **Báo cáo** của `audit-website/README.md`. Rồi bảng:
+Mỗi URL có điểm mobile và desktop, kèm một dòng chú ý ngay dưới bảng điểm và metric: các chỉ số không cần cải thiện (điểm tổng hiệu suất PSI ≥ 90; tải thật trong ngưỡng). Báo cáo chỉ kết luận theo điểm tổng; FCP, LCP, TBT, CLS, Speed Index, TTFB chỉ dùng để chọn dòng `proposed` khi điểm tổng chưa đạt. Cách ghi theo mục **Báo cáo** của `shared/README.md`. Rồi bảng:
 
 | Cột | Nội dung |
 | --- | --- |
@@ -74,9 +74,9 @@ Mỗi URL có điểm mobile và desktop, kèm một dòng chú ý ngay dưới 
 | Mã audit | id PageSpeed |
 | Vấn đề | Tiêu đề và giá trị hiển thị |
 | Nguyên nhân | File, kích thước, hoặc phần tử LCP |
-| Phương án | Option của plugin PRO |
+| Phương án | Option của plugin PUB |
 | Độ ưu tiên | P1 chỉ số chính fail, P2 tiết kiệm trên 200 ms, P3 còn lại |
-| Thông số | Thông số trong mục **Đánh giá trang** của `audit-website/README.md` mà dòng này ảnh hưởng |
+| Thông số | Thông số trong mục **Đánh giá trang** của `shared/README.md` mà dòng này ảnh hưởng |
 | Trạng thái | Gắn với thông số chưa đạt: `proposed` khi MCP đúng miền, `cần plugin` khi chưa cài plugin hoặc chưa có MCP đúng miền. Gắn với thông số đã đạt: `theo dõi`. Trang đạt cả 6 thông số: mọi dòng `theo dõi`, kết luận `Không cần tối ưu` |
 | Tải thật | Chỉ khi đã đo bằng trình duyệt |
 
@@ -104,6 +104,6 @@ Không áp dòng `suggestion`. Không ghi cấu hình LiteSpeed.
 
 ## Báo cáo Word cho khách
 
-Tạo bản gửi khách theo mục **Báo cáo Word cho khách** trong `audit-website/README.md`. Ảnh chụp lưu ở `audit-website/reports/YYYY-MM-DD-ten-mien/assets/`.
+Tạo bản gửi khách theo mục **Báo cáo Word cho khách** trong `shared/README.md`. Ảnh chụp lưu ở `audit-website/reports/YYYY-MM-DD-ten-mien/assets/`.
 
-Trường hợp 1 (chỉ Phase 1): trình tóm tắt rồi kết thúc, không hỏi tối ưu. Trường hợp 2: sang bước 2b trong mục **Quy trình** của `audit-website/README.md` (cài plugin và nối MCP nếu chưa, đo lại sau cài plugin 3 lần lấy trung vị làm mốc "trước", kiểm tra cấu hình đã có: mỗi option và dòng cũ là `giữ`, `thay` hoặc `gỡ`), rồi trình tóm tắt từng link, bảng **Cấu hình đã có** và bảng `proposed`, hỏi link nào cần tối ưu và dòng nào duyệt. Dừng tại đây cho đến khi người dùng trả lời.
+Trường hợp 1 (chỉ Phase 1): trình tóm tắt rồi kết thúc, không hỏi tối ưu. Trường hợp 2: sang bước 2b trong mục **Quy trình** của `shared/README.md` (cài plugin và nối MCP nếu chưa, đo lại sau cài plugin 3 lần lấy trung vị làm mốc "trước", kiểm tra cấu hình đã có: mỗi option và dòng cũ là `giữ`, `thay` hoặc `gỡ`), rồi trình tóm tắt từng link, bảng **Cấu hình đã có** và bảng `proposed`, hỏi link nào cần tối ưu và dòng nào duyệt. Dừng tại đây cho đến khi người dùng trả lời.

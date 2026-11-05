@@ -2,7 +2,7 @@
 
 Vietnix Pagespeed PRO giữ nguyên mọi tối ưu đang có. Phần phát triển mới là lớp MCP để agent (Cursor, Claude, Codex và client MCP khác) phân tích PageSpeed, lập báo cáo, rồi thực thi bằng đúng chức năng plugin.
 
-Từ 2026-10-16, quy trình vận hành chia hai giai đoạn: **Phase 1** khảo sát (đo, báo cáo hiện trạng) và **Phase 2** tối ưu và nghiệm thu. Mục 1–8 dưới đây tóm tắt theo quy trình đó. Chi tiết từng bước: `audit-website/README.md` mục **Quy trình**; sơ đồ và lý do thay đổi: `audit-website/quy-trinh/`. Mục 9 trở đi là nhật ký sửa plugin theo từng bản, giữ nguyên.
+Từ 2026-10-16, quy trình vận hành chia hai giai đoạn: **Phase 1** khảo sát (đo, báo cáo hiện trạng) và **Phase 2** tối ưu và nghiệm thu. Mục 1–8 dưới đây tóm tắt theo quy trình đó. Chi tiết từng bước: `shared/README.md` mục **Quy trình**; sơ đồ và lý do thay đổi: `shared/quy-trinh/`. Mục 9 trở đi là nhật ký sửa plugin theo từng bản, giữ nguyên.
 
 ## 1. Mục tiêu
 
@@ -57,7 +57,7 @@ Làm:
 
 Xong khi Cursor và một agent khác cùng liệt kê được tool, và màn MCP hiện đủ bốn mẫu.
 
-Mẫu Cursor trên trang admin là khối `url` và `headers`. Cursor đang dùng không gắn được hai header đó, nên nối qua file bridge `audit-website/scripts/vietnix-pagespeed-bridge.mjs`. Cách dán vào `~/.cursor/mcp.json` nằm ở mục **Kết nối** trong `audit-website/README.md`. Claude Code, Claude và Codex vẫn gửi header thẳng, không copy file bridge.
+Mẫu Cursor trên trang admin là khối `url` và `headers`. Cursor đang dùng không gắn được hai header đó, nên nối qua file bridge `shared/scripts/vietnix-pagespeed-bridge.mjs`. Cách dán vào `~/.cursor/mcp.json` nằm ở mục **Kết nối** trong `shared/README.md`. Claude Code, Claude và Codex vẫn gửi header thẳng, không copy file bridge.
 
 ```json
 {
@@ -253,7 +253,7 @@ Map audit sang plugin:
 
 ## 9. Điều chỉnh sau lần chạy thật
 
-_Nhật ký sửa plugin theo từng bản, giữ nguyên như lúc ghi. Số liệu và tên site ở đây là bằng chứng của lần chạy đó, không dùng làm mốc so sánh. Quy trình hiện hành: mục 6 và `audit-website/README.md`._
+_Nhật ký sửa plugin theo từng bản, giữ nguyên như lúc ghi. Số liệu và tên site ở đây là bằng chứng của lần chạy đó, không dùng làm mốc so sánh. Quy trình hiện hành: mục 6 và `shared/README.md`._
 
 Căn cứ: lần audit và tối ưu frozen-top.io.vn ngày 2026-10-08 (plugin 1.0), kết quả các tool trong phiên đó, 7 lần dry-run thử (không ghi database), và mã nguồn admin bản 1.0. Mã nguồn MCP chưa có trên máy, nên các lỗi dưới đây ghi theo hành vi quan sát được.
 

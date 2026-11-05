@@ -8,13 +8,13 @@ description: >-
 
 # Đo tốc độ tải thật
 
-Chỉ Cursor và Claude Code làm bước này, và chỉ khi có điểm PageSpeed để ghi cùng báo cáo. Điểm đó lấy qua `vnx_analyze_pagespeed` khi host `site_url` trùng miền, hoặc PSI API bằng key trong `Do.md` hay pagespeed.web.dev khi không có MCP hoặc MCP đang nối site khác (xem skill `audit-pagespeed`). Claude trên web và Codex không mở trình duyệt. Các agent đó chỉ dùng điểm PageSpeed Insights từ skill `audit-pagespeed`. File `vietnix-pagespeed-bridge.mjs` chỉ Cursor dùng khi gọi tool `vnx_*`. Claude Code nối HTTP trực tiếp, không copy file bridge. Lệnh đo mở URL trong `Do.md`, không mở `site_url` của MCP.
+Chỉ Cursor và Claude Code làm bước này, và chỉ khi có điểm PageSpeed để ghi cùng báo cáo. Điểm đó lấy qua `vnx_analyze_pagespeed` khi host `site_url` trùng miền, hoặc PSI API bằng key trong `shared/.env` hay pagespeed.web.dev khi không có MCP hoặc MCP đang nối site khác (xem skill `audit-pagespeed`). Claude trên web và Codex không mở trình duyệt. Các agent đó chỉ dùng điểm PageSpeed Insights từ skill `audit-pagespeed`. File `vietnix-pagespeed-bridge.mjs` chỉ Cursor dùng khi gọi tool `vnx_*`. Claude Code nối HTTP trực tiếp, không copy file bridge. Lệnh đo mở URL trong `Do.md`, không mở `site_url` của MCP.
 
 Plugin không mở trình duyệt và không nhận số đo nếu agent không ghi vào báo cáo.
 
 ## Cách đo
 
-Chạy `node audit-website/scripts/measure-run.js --url <URL> --scratch <thư mục tạm> --assets <assets của lần chạy>`. PageSpeed (key đọc từ `Do.md`, đổi file bằng `--do`) và Chrome đi cùng lệnh. Có điểm MCP rồi thì thêm `--skip-psi`; chỉ cần PSI thì `--skip-browser`. Kết quả ở `<thư mục tạm>/summary.json`. Không viết script đo mới. Không đo lần hai khi `summary.json` đã có bốn mốc, LCP và CLS. Ngoại lệ: mốc "trước" ở bước 2b và Double check, nghiệm thu ở bước 4 đo 3 lần, mỗi lần một `--scratch` riêng, lấy trung vị từng chỉ số (mục **Đo nhiều lần** trong bước 4 của `audit-website/README.md`).
+Chạy `node shared/scripts/measure-run.js --url <URL> --scratch <thư mục tạm> --assets <assets của lần chạy>`. PageSpeed (key đọc từ `shared/.env`, đổi file bằng `--env`) và Chrome đi cùng lệnh. Có điểm MCP rồi thì thêm `--skip-psi`; chỉ cần PSI thì `--skip-browser`. Kết quả ở `<thư mục tạm>/summary.json`. Không viết script đo mới. Không đo lần hai khi `summary.json` đã có bốn mốc, LCP và CLS. Ngoại lệ: mốc "trước" ở bước 2b và Double check, nghiệm thu ở bước 4 đo 3 lần, mỗi lần một `--scratch` riêng, lấy trung vị từng chỉ số (mục **Đo nhiều lần** trong bước 4 của `shared/README.md`).
 
 Script tự làm phần mở trang, chờ, đo và chụp ở các bước dưới đây. Agent đọc `summary.json` và ghi vào báo cáo.
 
